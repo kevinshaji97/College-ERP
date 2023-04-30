@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'jy8c-n9y=pf##!2^jae-l_5iafq6q%wfq8gdb6c0r5d52su+9y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,6 +44,11 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework.authtoken',
     'apis',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'sslserver',
+    'admin_honeypot',
+    'axes'
 
 ]
 
@@ -55,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_otp.middleware.OTPMiddleware',
+    'axes.middleware.AxesMiddleware'
 ]
 
 ROOT_URLCONF = 'CollegeERP.urls'
@@ -129,6 +136,20 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
 
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+AXES_FAILURE_LIMIT = 5  # number of login attempts allowed before lockout
+AXES_LOCKOUT_TEMPLATE = 'info/brutforce.html'  # custom lockout template
+AXES_USE_USER_AGENT = True  # track user agent information
+AXES_USE_REFERER = True  # track referer information
+AXES_VERBOSE = True  # log failed login attempts
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -137,4 +158,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+
 }
